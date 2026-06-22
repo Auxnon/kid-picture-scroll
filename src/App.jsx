@@ -90,17 +90,15 @@ const warmImageCache = async (urls) => {
 
   try {
     const cache = await window.caches.open('kid-picture-scroll-images-v1')
-    await Promise.all(
-      urls.slice(0, 12).map(async (url) => {
-        try {
-          if (!(await cache.match(url))) {
-            await cache.add(url)
-          }
-        } catch {
-          // Ignore per-image caching failures.
+    for (const url of urls.slice(0, 12)) {
+      try {
+        if (!(await cache.match(url))) {
+          await cache.add(url)
         }
-      }),
-    )
+      } catch {
+        // Ignore per-image caching failures.
+      }
+    }
   } catch {
     // Ignore global cache storage failures.
   }
